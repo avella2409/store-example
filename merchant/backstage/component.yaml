@@ -1,0 +1,16 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: merchant-service
+  description: Merchant Service
+spec:
+  type: service
+  lifecycle: production
+  owner: avella
+  system: store-system
+  dependsOn:
+    - component:default/productinfo-service
+  dependencyOf:
+    - component:default/store-web
+  providesApis:
+    - merchant-api

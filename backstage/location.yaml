@@ -1,0 +1,11 @@
+apiVersion: backstage.io/v1alpha1
+kind: Location
+metadata:
+  name: store-data
+spec:
+  type: url
+  targets:
+    - ./system.yaml
+    - ../merchant/backstage/location.yaml
+    - ../product-info/backstage/location.yaml
+    - ../front/backstage/location.yaml

@@ -1,0 +1,30 @@
+name: merchant
+image:
+  version: null # Pass as cmd parameter
+
+env:
+  id: null # Pass as cmd parameter
+
+shared:
+  gateway:
+    name: "avella-gateway"
+  namespace: hello
+
+port: 8080
+
+publishing:
+  urls: "http://productinfo:8080/webhook/canPublish" # Rules Engine pattern
+
+tracing:
+  probability: 0.1
+  zipkin:
+    serviceName: zipkin
+
+gcloud:
+  region: null # Pass as cmd parameter
+  projectId: null # Pass as cmd parameter
+  pubsub:
+    topicId: 
+      self: merchant
+    subscriptionId: 
+      keycloak: "merchant-register-sub"

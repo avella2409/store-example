@@ -1,0 +1,9 @@
+apiVersion: backstage.io/v1alpha1
+kind: Location
+metadata:
+  name: productinfo-data
+spec:
+  type: url
+  targets:
+    - ./component.yaml
+    - ./api.yaml

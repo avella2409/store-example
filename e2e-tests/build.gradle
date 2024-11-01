@@ -1,0 +1,26 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.avella.store'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+    implementation group: 'org.keycloak', name: 'keycloak-admin-client', version: '26.0.1'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.18.0'
+
+    // https://mvnrepository.com/artifact/com.google.cloud/google-cloud-pubsub
+    implementation group: 'com.google.cloud', name: 'google-cloud-pubsub', version: '1.134.1'
+
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+test {
+    useJUnitPlatform()
+}

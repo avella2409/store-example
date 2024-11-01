@@ -1,0 +1,12 @@
+name: keycloak
+image: 
+  version: "1.0.1"
+
+port:
+  base: 8080
+  health: 9000
+
+gcloud:
+  region: null # Pass as cmd parameter
+  projectId: null # Pass as cmd parameter
+  topicId: keycloak

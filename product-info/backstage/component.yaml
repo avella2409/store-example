@@ -1,0 +1,15 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: productinfo-service
+  description: Product Info Service
+spec:
+  type: service
+  lifecycle: production
+  owner: avella
+  system: store-system
+  dependencyOf:
+    - component:default/merchant-service
+    - component:default/store-web
+  providesApis:
+    - productinfo-api

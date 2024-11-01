@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.name }}
+spec:
+  type: ClusterIP
+  selector:
+    name: {{ .Values.name }}
+  ports:
+    - name: "base"
+      port: {{ .Values.port.base }}
+      targetPort: {{ .Values.port.base }}
+    - name: "health"
+      port: {{ .Values.port.health }}
+      targetPort: {{ .Values.port.health }} 

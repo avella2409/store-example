@@ -1,0 +1,9 @@
+apiVersion: backstage.io/v1alpha1
+kind: Location
+metadata:
+  name: merchant-data
+spec:
+  type: url
+  targets:
+    - ./component.yaml
+    - ./api.yaml

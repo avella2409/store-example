@@ -1,0 +1,25 @@
+name: productinfo
+image:
+  version: null # Pass as cmd parameter
+
+env:
+  id: null # Pass as cmd parameter
+
+shared:
+  gateway:
+    name: "avella-gateway"
+  namespace: hello
+
+port: 8080
+
+tracing:
+  probability: 0.1
+  zipkin:
+    serviceName: zipkin
+
+gcloud:
+  region: null # Pass as cmd parameter
+  projectId: null # Pass as cmd parameter
+  pubsub:
+    subscriptionId:
+        merchant: "merchant-to-productinfo"

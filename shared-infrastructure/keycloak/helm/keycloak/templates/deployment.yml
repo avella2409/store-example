@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.name }}
+  labels:
+    name: {{ .Values.name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: {{ .Values.name }}
+  template:
+    metadata:
+      name: {{ .Values.name }}
+      labels:
+        name: {{ .Values.name }}
+    spec:
+      serviceAccountName: {{ .Values.name }}
+      containers:
+        - name: {{ .Values.name }}
+          image: "{{ .Values.gcloud.region }}-docker.pkg.dev/{{ .Values.gcloud.projectId }}/helloworld/{{ .Values.name }}:{{ .Values.image.version }}"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: {{ .Values.port.health }}
+            initialDelaySeconds: 120
+            periodSeconds: 3
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: {{ .Values.port.health }}
+            initialDelaySeconds: 120
+            periodSeconds: 3
+          ports:
+            - containerPort: {{ .Values.port.base }}
+            - containerPort: {{ .Values.port.health }}
+          env:
+            - name: GCLOUD_PROJECT_ID
+              value: "{{ .Values.gcloud.projectId }}"
+            - name: GCLOUD_TOPIC_ID
+              value: "{{ .Values.gcloud.topicId }}"
+            - name: KC_BOOTSTRAP_ADMIN_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: keycloakaccount
+                  key: username
+            - name: KC_BOOTSTRAP_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: keycloakaccount
+                  key: password

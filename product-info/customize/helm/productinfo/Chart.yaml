@@ -1,0 +1,9 @@
+apiVersion: v2
+name: productinfo
+description: ProductInfo helm chart
+
+type: application
+
+version: 0.1.1
+
+appVersion: "1.0.0"

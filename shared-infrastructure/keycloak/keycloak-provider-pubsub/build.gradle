@@ -1,0 +1,28 @@
+plugins {
+    id 'java'
+    id 'com.gradleup.shadow' version '8.3.3'
+}
+
+group = 'com.avella'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation group: 'com.google.cloud', name: 'google-cloud-pubsub', version: '1.133.1'
+
+    compileOnly group: 'org.keycloak', name: 'keycloak-core', version: '26.0.1'
+
+    compileOnly group: 'org.keycloak', name: 'keycloak-server-spi-private', version: '26.0.1'
+
+    compileOnly group: 'org.keycloak', name: 'keycloak-server-spi', version: '26.0.1'
+
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+test {
+    useJUnitPlatform()
+}

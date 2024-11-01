@@ -1,0 +1,7 @@
+name: zipkin
+image: 
+  name: "openzipkin/zipkin-gcp"
+port: 9411
+
+gcloud:
+  projectId: null # Pass as cmd parameter

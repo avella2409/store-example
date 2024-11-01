@@ -1,0 +1,93 @@
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: merchant-api
+  description: Merchant API
+spec:
+  type: openapi
+  lifecycle: production
+  owner: avella
+  system: store-system
+  definition: |
+    openapi: 3.0.1
+    info:
+      title: OpenAPI definition
+      version: v0
+    servers:
+    - url: http://localhost:8080
+      description: Generated server url
+    paths:
+      /product/publish:
+        post:
+          tags:
+          - product-controller
+          operationId: publish
+          requestBody:
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/PublishProductRequest"
+            required: true
+          responses:
+            "200":
+              description: OK
+      /product/create:
+        post:
+          tags:
+          - product-controller
+          operationId: create
+          responses:
+            "200":
+              description: OK
+              content:
+                '*/*':
+                  schema:
+                    type: string
+      /product/archive:
+        post:
+          tags:
+          - product-controller
+          operationId: archive
+          requestBody:
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/ArchiveProductRequest"
+            required: true
+          responses:
+            "200":
+              description: OK
+      /product/findAll:
+        get:
+          tags:
+          - product-controller
+          operationId: findAll
+          responses:
+            "200":
+              description: OK
+              content:
+                '*/*':
+                  schema:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/ProductStatusDto"
+    components:
+      schemas:
+        PublishProductRequest:
+          type: object
+          properties:
+            productId:
+              type: string
+        ArchiveProductRequest:
+          type: object
+          properties:
+            productId:
+              type: string
+        ProductStatusDto:
+          type: object
+          properties:
+            id:
+              type: string
+            status:
+              type: string
+    ...
