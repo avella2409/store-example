@@ -6,7 +6,6 @@ import com.avella.store.merchant.application.command.PublishProductCommand;
 import com.avella.store.merchant.application.service.TimeService;
 import com.avella.store.merchant.domain.MerchantRepository;
 import com.avella.store.merchant.domain.PublishingRulesEngine;
-import jakarta.transaction.Transactional;
 
 public class PublishProductHandler implements CommandHandler<PublishProductCommand> {
 
@@ -23,7 +22,6 @@ public class PublishProductHandler implements CommandHandler<PublishProductComma
     }
 
     @Override
-    @Transactional
     public void handle(PublishProductCommand publishProductCommand) {
         var merchant = merchantRepository.merchant(publishProductCommand.merchantId())
                 .orElseThrow(() -> new ApplicationException("Unknown merchant"));

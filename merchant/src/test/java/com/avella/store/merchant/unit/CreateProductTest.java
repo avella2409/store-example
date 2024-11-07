@@ -1,7 +1,5 @@
 package com.avella.store.merchant.unit;
 
-import com.avella.store.merchant.unit.impl.InMemoryEventToDispatchRepository;
-import com.avella.store.merchant.unit.impl.InMemoryMerchantRepository;
 import com.avella.shared.application.ApplicationException;
 import com.avella.shared.application.CommandHandler;
 import com.avella.shared.domain.DomainException;
@@ -11,10 +9,12 @@ import com.avella.store.merchant.application.command.handler.CreateProductHandle
 import com.avella.store.merchant.domain.Event;
 import com.avella.store.merchant.domain.Merchant;
 import com.avella.store.merchant.domain.Product;
+import com.avella.store.merchant.unit.impl.InMemoryEventToDispatchRepository;
+import com.avella.store.merchant.unit.impl.InMemoryMerchantRepository;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.List;
 import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -37,47 +37,53 @@ public class CreateProductTest {
 
     @Test
     void createProduct() {
-        merchantRepository.saveSnapshot(snapshot("merchant"));
+        merchantRepository.saveSnapshot(merchant("merchant1"));
 
-        handler.handle(createProduct("merchant", "product1"));
+        handler.handle(createProduct("merchant1", "product1"));
 
-        assertEquals(Set.of(new Product.Draft("product1", now)),
-                merchantRepository.merchantSnapshot("merchant").products());
-
+        assertHasSameProducts(
+                List.of(new Product.Draft("product1", now)),
+                merchantRepository.merchantSnapshot("merchant1").products()
+        );
         assertTrue(eventToDispatchRepository.dispatched()
-                .contains(new Event.ProductCreated("merchant", "product1")));
+                .contains(new Event.ProductCreated("merchant1", "product1")));
     }
 
     @Test
     void errorWhenExceedingMaxProductLimit() {
-        merchantRepository.saveSnapshot(snapshot("merchant"));
+        merchantRepository.saveSnapshot(merchant("merchant1"));
 
-        IntStream.range(0, Merchant.MAX_PRODUCT_LIMIT).forEach(i -> handler.handle(createProduct("merchant", "product" + i)));
+        IntStream.range(0, Merchant.MAX_PRODUCT_LIMIT).forEach(i -> handler.handle(createProduct("merchant1", "product" + i)));
 
-        var error = assertThrows(DomainException.class, () -> handler.handle(createProduct("merchant", "tooMuchProduct")));
+        var error = assertThrows(DomainException.class, () -> handler.handle(createProduct("merchant1", "tooMuchProduct")));
 
         assertEquals("Maximum product limit exceeded", error.getMessage());
     }
 
     @Test
     void errorWhenProductIdIsAlreadyInUse() {
-        merchantRepository.saveSnapshot(snapshot("merchant"));
+        merchantRepository.saveSnapshot(merchant("merchant1"));
 
-        handler.handle(createProduct("merchant", "product1"));
+        handler.handle(createProduct("merchant1", "product1"));
 
-        var error = assertThrows(DomainException.class, () -> handler.handle(createProduct("merchant", "product1")));
+        var error = assertThrows(DomainException.class, () -> handler.handle(createProduct("merchant1", "product1")));
 
-        assertEquals("Product Id already used", error.getMessage());
+        assertEquals("Product already exist", error.getMessage());
     }
 
-    private Merchant.Snapshot snapshot(String merchantId) {
+    private Merchant.Snapshot merchant(String merchantId) {
         return new Merchant.Snapshot(
                 new Entity.Snapshot(merchantId, now, now, 1, null),
-                Set.of()
+                List.of()
         );
     }
 
     private CreateProductCommand createProduct(String merchantId, String productId) {
         return new CreateProductCommand(merchantId, productId);
+    }
+
+    private void assertHasSameProducts(List<Product> expected, List<Product> products) {
+        assertEquals(expected.size(), products.size());
+        assertTrue(products.containsAll(expected));
     }
 }

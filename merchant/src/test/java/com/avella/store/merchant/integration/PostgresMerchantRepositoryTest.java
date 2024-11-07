@@ -4,9 +4,9 @@ import com.avella.shared.domain.Entity;
 import com.avella.store.merchant.domain.Event;
 import com.avella.store.merchant.domain.Merchant;
 import com.avella.store.merchant.domain.Product;
-import com.avella.store.merchant.infrastructure.repository.SQLMerchantRepository;
 import com.avella.store.merchant.infrastructure.repository.JpaEventRepository;
 import com.avella.store.merchant.infrastructure.repository.JpaMerchantRepository;
+import com.avella.store.merchant.infrastructure.repository.PostgresMerchantRepository;
 import com.avella.store.merchant.infrastructure.repository.model.EventDb;
 import com.avella.store.merchant.integration.shared.PostgreContainer;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,7 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -34,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @RecordApplicationEvents
 @Tag("integration")
-public class SQLMerchantRepositoryTest extends PostgreContainer {
+public class PostgresMerchantRepositoryTest extends PostgreContainer {
 
     // Align with Postgres TIMESTAMP precision (no nanoseconds)
     private final LocalDateTime now =
@@ -52,7 +51,7 @@ public class SQLMerchantRepositoryTest extends PostgreContainer {
     @Autowired
     private ApplicationEvents applicationEvents;
 
-    private SQLMerchantRepository merchantRepository;
+    private PostgresMerchantRepository merchantRepository;
 
     @BeforeEach
     void setup() {
@@ -60,7 +59,7 @@ public class SQLMerchantRepositoryTest extends PostgreContainer {
         jpaEventRepository.deleteAll();
 
         var objectMapper = new ObjectMapper();
-        merchantRepository = new SQLMerchantRepository(
+        merchantRepository = new PostgresMerchantRepository(
                 jpaMerchantRepository,
                 jpaEventRepository,
                 eventPublisher,
@@ -70,7 +69,7 @@ public class SQLMerchantRepositoryTest extends PostgreContainer {
 
     @Test
     void saveAndRetrieve() {
-        Set<Product> products = Set.of(
+        List<Product> products = List.of(
                 new Product.Draft("p1", now),
                 new Product.Archived("p2", now, now.plusDays(1)),
                 new Product.Published("p3", now, now.plusDays(2))
@@ -92,7 +91,7 @@ public class SQLMerchantRepositoryTest extends PostgreContainer {
                         new Event.ProductPublished("merchant1", "p3", "publishingId1"),
                         new Event.MerchantRegistered("merchant1")
                 )),
-                Set.of()
+                List.of()
         ));
 
         var events = jpaEventRepository.findAll();

@@ -19,10 +19,9 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Repository
-public class SQLMerchantRepository implements MerchantRepository {
+public class PostgresMerchantRepository implements MerchantRepository {
 
     public static final String STATUS_ARCHIVED = "ARCHIVED";
     public static final String STATUS_DRAFT = "DRAFT";
@@ -33,10 +32,10 @@ public class SQLMerchantRepository implements MerchantRepository {
     private final ApplicationEventPublisher eventPublisher;
     private final ObjectMapper objectMapper;
 
-    public SQLMerchantRepository(JpaMerchantRepository jpaMerchantRepository,
-                                 JpaEventRepository jpaEventRepository,
-                                 ApplicationEventPublisher eventPublisher,
-                                 ObjectMapper objectMapper) {
+    public PostgresMerchantRepository(JpaMerchantRepository jpaMerchantRepository,
+                                      JpaEventRepository jpaEventRepository,
+                                      ApplicationEventPublisher eventPublisher,
+                                      ObjectMapper objectMapper) {
         this.jpaMerchantRepository = jpaMerchantRepository;
         this.jpaEventRepository = jpaEventRepository;
         this.eventPublisher = eventPublisher;
@@ -64,18 +63,22 @@ public class SQLMerchantRepository implements MerchantRepository {
                                 merchant.getVersion(),
                                 null
                         ),
-                        fromJson(merchant.getProducts()).products().stream()
-                                .map(p -> switch (p.status()) {
-                                    case STATUS_ARCHIVED ->
-                                            new Product.Archived(p.productId(), localDateTime(p.creationTime()), localDateTime(p.archiveTime()));
-                                    case STATUS_DRAFT ->
-                                            new Product.Draft(p.productId(), localDateTime(p.creationTime()));
-                                    case STATUS_PUBLISHED ->
-                                            new Product.Published(p.productId(), localDateTime(p.creationTime()), localDateTime(p.publishedTime()));
-                                    default -> throw new IllegalStateException("Unexpected value: " + p.status());
-                                })
-                                .collect(Collectors.toSet())
+                        fromJson(merchant.getProducts())
+                                .products().stream()
+                                .map(this::toProduct)
+                                .toList()
                 ));
+    }
+
+    private Product toProduct(ProductJson p) {
+        return switch (p.status()) {
+            case STATUS_ARCHIVED ->
+                    new Product.Archived(p.productId(), localDateTime(p.creationTime()), localDateTime(p.archiveTime()));
+            case STATUS_DRAFT -> new Product.Draft(p.productId(), localDateTime(p.creationTime()));
+            case STATUS_PUBLISHED ->
+                    new Product.Published(p.productId(), localDateTime(p.creationTime()), localDateTime(p.publishedTime()));
+            default -> throw new IllegalStateException("Unexpected value: " + p.status());
+        };
     }
 
     public void saveSnapshot(Merchant.Snapshot snapshot) {

@@ -4,10 +4,6 @@ import java.time.LocalDateTime;
 
 public sealed interface Product {
 
-    String productId();
-
-    LocalDateTime creationTime();
-
     static Product.Draft createDraft(String productId, LocalDateTime creationTime) {
         return new Draft(productId, creationTime);
     }
@@ -26,4 +22,8 @@ public sealed interface Product {
 
     record Archived(String productId, LocalDateTime creationTime, LocalDateTime archiveTime) implements Product {
     }
+
+    String productId();
+
+    LocalDateTime creationTime();
 }

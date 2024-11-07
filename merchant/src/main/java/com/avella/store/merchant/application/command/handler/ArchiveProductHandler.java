@@ -5,7 +5,6 @@ import com.avella.shared.application.CommandHandler;
 import com.avella.store.merchant.application.command.ArchiveProductCommand;
 import com.avella.store.merchant.application.service.TimeService;
 import com.avella.store.merchant.domain.MerchantRepository;
-import jakarta.transaction.Transactional;
 
 public class ArchiveProductHandler implements CommandHandler<ArchiveProductCommand> {
 
@@ -19,7 +18,6 @@ public class ArchiveProductHandler implements CommandHandler<ArchiveProductComma
     }
 
     @Override
-    @Transactional
     public void handle(ArchiveProductCommand archiveProductCommand) {
         var merchant = merchantRepository.merchant(archiveProductCommand.merchantId())
                 .orElseThrow(() -> new ApplicationException("Unknown merchant"));

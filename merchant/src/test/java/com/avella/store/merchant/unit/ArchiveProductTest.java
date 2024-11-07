@@ -1,7 +1,5 @@
 package com.avella.store.merchant.unit;
 
-import com.avella.store.merchant.unit.impl.InMemoryEventToDispatchRepository;
-import com.avella.store.merchant.unit.impl.InMemoryMerchantRepository;
 import com.avella.shared.application.ApplicationException;
 import com.avella.shared.application.CommandHandler;
 import com.avella.shared.domain.DomainException;
@@ -11,22 +9,25 @@ import com.avella.store.merchant.application.command.handler.ArchiveProductHandl
 import com.avella.store.merchant.domain.Event;
 import com.avella.store.merchant.domain.Merchant;
 import com.avella.store.merchant.domain.Product;
+import com.avella.store.merchant.unit.impl.InMemoryEventToDispatchRepository;
+import com.avella.store.merchant.unit.impl.InMemoryMerchantRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.List;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ArchiveProductTest {
 
-    private final LocalDateTime now = LocalDateTime.now();
     private final InMemoryEventToDispatchRepository eventToDispatchRepository =
             new InMemoryEventToDispatchRepository();
     private final InMemoryMerchantRepository merchantRepository = new InMemoryMerchantRepository(eventToDispatchRepository);
+    private final LocalDateTime now = LocalDateTime.now();
+    private final LocalDateTime yesterday = now.minusDays(1);
     private final CommandHandler<ArchiveProductCommand> handler =
             new ArchiveProductHandler(merchantRepository, () -> now);
 
@@ -40,39 +41,38 @@ public class ArchiveProductTest {
 
     @Test
     void errorWhenProductNotFound() {
-        merchantRepository.saveSnapshot(snapshot("merchant", Set.of()));
+        merchantRepository.saveSnapshot(merchant("merchant1", List.of()));
 
-        var error = assertThrows(DomainException.class, () -> handler.handle(archiveProduct("merchant", "notFound")));
+        var error = assertThrows(DomainException.class, () -> handler.handle(archiveProduct("merchant1", "notFound")));
 
         assertEquals("Product not found", error.getMessage());
     }
 
     @Test
     void archiveProduct() {
-        merchantRepository.saveSnapshot(snapshot("merchant",
-                Set.of(
-                        new Product.Published("product1", now.minusDays(1), now.minusSeconds(1)),
-                        new Product.Published("product2", now.minusDays(1), now.minusSeconds(1))
+        merchantRepository.saveSnapshot(merchant("merchant1",
+                List.of(
+                        new Product.Published("product1", yesterday, yesterday),
+                        new Product.Published("product2", yesterday, yesterday)
                 )));
 
-        handler.handle(archiveProduct("merchant", "product1"));
+        handler.handle(archiveProduct("merchant1", "product1"));
 
-        assertEquals(Set.of(
-                        new Product.Archived("product1", now.minusDays(1), now),
-                        new Product.Published("product2", now.minusDays(1), now.minusSeconds(1))
-                ),
-                merchantRepository.merchantSnapshot("merchant").products());
+        assertHasSameProducts(List.of(
+                new Product.Archived("product1", yesterday, now),
+                new Product.Published("product2", yesterday, yesterday)
+        ), merchantRepository.merchantSnapshot("merchant1").products());
 
         assertTrue(eventToDispatchRepository.dispatched()
-                .contains(new Event.ProductArchived("merchant", "product1")));
+                .contains(new Event.ProductArchived("merchant1", "product1")));
     }
 
     @ParameterizedTest
     @MethodSource("productNotPublishedStream")
     void errorWhenProductIsNotPublished(Product product) {
-        merchantRepository.saveSnapshot(snapshot("merchant", Set.of(product)));
+        merchantRepository.saveSnapshot(merchant("merchant1", List.of(product)));
 
-        var error = assertThrows(DomainException.class, () -> handler.handle(archiveProduct("merchant", product.productId())));
+        var error = assertThrows(DomainException.class, () -> handler.handle(archiveProduct("merchant1", product.productId())));
 
         assertEquals("Can only archive a published product", error.getMessage());
     }
@@ -84,7 +84,7 @@ public class ArchiveProductTest {
         );
     }
 
-    private Merchant.Snapshot snapshot(String merchantId, Set<Product> products) {
+    private Merchant.Snapshot merchant(String merchantId, List<Product> products) {
         return new Merchant.Snapshot(
                 new Entity.Snapshot(merchantId, LocalDateTime.MIN, LocalDateTime.MIN, 1, null),
                 products
@@ -93,5 +93,10 @@ public class ArchiveProductTest {
 
     private ArchiveProductCommand archiveProduct(String merchantId, String productId) {
         return new ArchiveProductCommand(merchantId, productId);
+    }
+
+    private void assertHasSameProducts(List<Product> expected, List<Product> products) {
+        assertEquals(expected.size(), products.size());
+        assertTrue(products.containsAll(expected));
     }
 }
