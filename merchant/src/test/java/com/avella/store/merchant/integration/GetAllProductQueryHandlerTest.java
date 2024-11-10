@@ -1,7 +1,7 @@
 package com.avella.store.merchant.integration;
 
-import com.avella.store.merchant.application.query.GetAllProductQuery;
-import com.avella.store.merchant.application.query.dto.ProductStatusDto;
+import com.avella.store.merchant.core.query.GetAllProductQuery;
+import com.avella.store.merchant.core.query.dto.ProductStatusDto;
 import com.avella.store.merchant.infrastructure.query.GetAllProductQueryHandler;
 import com.avella.store.merchant.infrastructure.repository.JpaMerchantRepository;
 import com.avella.store.merchant.infrastructure.repository.model.MerchantDb;

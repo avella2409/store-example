@@ -1,4 +1,4 @@
-package com.avella.store.merchant.domain;
+package com.avella.store.merchant.core.command.domain;
 
 import com.avella.shared.domain.DomainEvent;
 

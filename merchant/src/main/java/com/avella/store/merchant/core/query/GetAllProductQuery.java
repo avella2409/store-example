@@ -1,7 +1,7 @@
-package com.avella.store.merchant.application.query;
+package com.avella.store.merchant.core.query;
 
 import com.avella.shared.application.Query;
-import com.avella.store.merchant.application.query.dto.ProductStatusDto;
+import com.avella.store.merchant.core.query.dto.ProductStatusDto;
 
 import java.util.List;
 

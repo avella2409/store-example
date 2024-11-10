@@ -1,6 +1,6 @@
 package com.avella.store.merchant.unit.impl;
 
-import com.avella.store.merchant.domain.PublishingRulesEngine;
+import com.avella.store.merchant.core.command.domain.PublishingRulesEngine;
 
 public class CustomPublishingRulesEngine implements PublishingRulesEngine {
 

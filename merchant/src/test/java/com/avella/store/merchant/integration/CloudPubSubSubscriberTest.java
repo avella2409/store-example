@@ -1,7 +1,7 @@
 package com.avella.store.merchant.integration;
 
 import com.avella.shared.application.Command;
-import com.avella.store.merchant.application.command.RegisterMerchantCommand;
+import com.avella.store.merchant.core.command.RegisterMerchantCommand;
 import com.avella.store.merchant.client.listener.CloudPubSubSubscriber;
 import com.avella.store.merchant.integration.shared.Gcloud;
 import com.avella.store.merchant.integration.shared.Waiter;

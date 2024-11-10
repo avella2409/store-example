@@ -1,7 +1,7 @@
 package com.avella.store.merchant.client.listener;
 
 import com.avella.shared.application.CommandDispatcher;
-import com.avella.store.merchant.application.command.RegisterMerchantCommand;
+import com.avella.store.merchant.core.command.RegisterMerchantCommand;
 import com.avella.store.merchant.client.listener.event.RegisterEvent;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.api.gax.core.InstantiatingExecutorProvider;

@@ -1,10 +1,9 @@
-package com.avella.store.merchant.application.command.handler;
+package com.avella.store.merchant.core.command.handler;
 
 import com.avella.shared.application.ApplicationException;
 import com.avella.shared.application.CommandHandler;
-import com.avella.store.merchant.application.command.CreateProductCommand;
-import com.avella.store.merchant.application.service.TimeService;
-import com.avella.store.merchant.domain.MerchantRepository;
+import com.avella.store.merchant.core.command.CreateProductCommand;
+import com.avella.store.merchant.core.command.domain.MerchantRepository;
 
 public class CreateProductHandler implements CommandHandler<CreateProductCommand> {
 

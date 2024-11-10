@@ -1,6 +1,6 @@
 package com.avella.store.merchant.infrastructure.service;
 
-import com.avella.store.merchant.application.service.TimeService;
+import com.avella.store.merchant.core.command.handler.TimeService;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;

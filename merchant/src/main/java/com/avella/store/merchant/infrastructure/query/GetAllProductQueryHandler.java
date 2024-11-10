@@ -1,8 +1,8 @@
 package com.avella.store.merchant.infrastructure.query;
 
 import com.avella.shared.application.QueryHandler;
-import com.avella.store.merchant.application.query.GetAllProductQuery;
-import com.avella.store.merchant.application.query.dto.ProductStatusDto;
+import com.avella.store.merchant.core.query.GetAllProductQuery;
+import com.avella.store.merchant.core.query.dto.ProductStatusDto;
 import com.avella.store.merchant.infrastructure.repository.JpaMerchantRepository;
 import com.avella.store.merchant.infrastructure.repository.model.ProductsJson;
 import com.fasterxml.jackson.core.JsonProcessingException;

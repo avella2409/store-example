@@ -3,9 +3,9 @@ package com.avella.store.merchant.unit;
 import com.avella.store.merchant.unit.impl.InMemoryEventToDispatchRepository;
 import com.avella.store.merchant.unit.impl.InMemoryMerchantRepository;
 import com.avella.shared.application.CommandHandler;
-import com.avella.store.merchant.application.command.RegisterMerchantCommand;
-import com.avella.store.merchant.application.command.handler.RegisterMerchantHandler;
-import com.avella.store.merchant.domain.Event;
+import com.avella.store.merchant.core.command.RegisterMerchantCommand;
+import com.avella.store.merchant.core.command.handler.RegisterMerchantHandler;
+import com.avella.store.merchant.core.command.domain.Event;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;

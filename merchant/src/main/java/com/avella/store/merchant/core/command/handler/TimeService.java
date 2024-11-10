@@ -1,4 +1,4 @@
-package com.avella.store.merchant.application.service;
+package com.avella.store.merchant.core.command.handler;
 
 import java.time.LocalDateTime;
 

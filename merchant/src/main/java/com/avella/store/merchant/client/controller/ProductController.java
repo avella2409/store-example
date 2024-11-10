@@ -2,11 +2,11 @@ package com.avella.store.merchant.client.controller;
 
 import com.avella.shared.application.CommandDispatcher;
 import com.avella.shared.application.QueryDispatcher;
-import com.avella.store.merchant.application.command.ArchiveProductCommand;
-import com.avella.store.merchant.application.command.CreateProductCommand;
-import com.avella.store.merchant.application.command.PublishProductCommand;
-import com.avella.store.merchant.application.query.GetAllProductQuery;
-import com.avella.store.merchant.application.query.dto.ProductStatusDto;
+import com.avella.store.merchant.core.command.ArchiveProductCommand;
+import com.avella.store.merchant.core.command.CreateProductCommand;
+import com.avella.store.merchant.core.command.PublishProductCommand;
+import com.avella.store.merchant.core.query.GetAllProductQuery;
+import com.avella.store.merchant.core.query.dto.ProductStatusDto;
 import com.avella.store.merchant.client.controller.request.ArchiveProductRequest;
 import com.avella.store.merchant.client.controller.request.PublishProductRequest;
 import org.springframework.web.bind.annotation.*;

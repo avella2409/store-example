@@ -1,9 +1,9 @@
 package com.avella.store.merchant.integration;
 
 import com.avella.shared.domain.Entity;
-import com.avella.store.merchant.domain.Event;
-import com.avella.store.merchant.domain.Merchant;
-import com.avella.store.merchant.domain.Product;
+import com.avella.store.merchant.core.command.domain.Event;
+import com.avella.store.merchant.core.command.domain.Merchant;
+import com.avella.store.merchant.core.command.domain.Product;
 import com.avella.store.merchant.infrastructure.repository.JpaEventRepository;
 import com.avella.store.merchant.infrastructure.repository.JpaMerchantRepository;
 import com.avella.store.merchant.infrastructure.repository.PostgresMerchantRepository;

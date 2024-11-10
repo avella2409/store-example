@@ -1,8 +1,8 @@
 package com.avella.store.merchant.unit.impl;
 
-import com.avella.store.merchant.domain.Event;
-import com.avella.store.merchant.domain.Merchant;
-import com.avella.store.merchant.domain.MerchantRepository;
+import com.avella.store.merchant.core.command.domain.Event;
+import com.avella.store.merchant.core.command.domain.Merchant;
+import com.avella.store.merchant.core.command.domain.MerchantRepository;
 
 import java.util.HashMap;
 import java.util.Map;

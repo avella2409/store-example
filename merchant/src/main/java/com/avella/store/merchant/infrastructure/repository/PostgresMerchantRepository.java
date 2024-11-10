@@ -2,10 +2,10 @@ package com.avella.store.merchant.infrastructure.repository;
 
 import com.avella.shared.domain.DomainEvent;
 import com.avella.shared.domain.Entity;
-import com.avella.store.merchant.domain.Event;
-import com.avella.store.merchant.domain.Merchant;
-import com.avella.store.merchant.domain.MerchantRepository;
-import com.avella.store.merchant.domain.Product;
+import com.avella.store.merchant.core.command.domain.Event;
+import com.avella.store.merchant.core.command.domain.Merchant;
+import com.avella.store.merchant.core.command.domain.MerchantRepository;
+import com.avella.store.merchant.core.command.domain.Product;
 import com.avella.store.merchant.infrastructure.repository.model.EventDb;
 import com.avella.store.merchant.infrastructure.repository.model.MerchantDb;
 import com.avella.store.merchant.infrastructure.repository.model.ProductJson;

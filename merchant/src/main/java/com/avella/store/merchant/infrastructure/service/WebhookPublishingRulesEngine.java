@@ -1,6 +1,6 @@
 package com.avella.store.merchant.infrastructure.service;
 
-import com.avella.store.merchant.domain.PublishingRulesEngine;
+import com.avella.store.merchant.core.command.domain.PublishingRulesEngine;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
